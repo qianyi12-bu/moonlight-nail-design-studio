@@ -21,73 +21,123 @@
     <div class="header-wrapper">
       <h1>Moonlight Nails Design Studio</h1>
       <nav>
-          <a href="index.html">HOME</a>
-          <a href="design.html">DESIGN</a>
-          <a href="about.html">ABOUT</a>
+        <a href="index.html">HOME</a>
+        <a href="design.html">DESIGN</a>
+        <a href="about.html">ABOUT</a>
       </nav>
+    </div>
+
+    <h2>Design Your Own Nails</h2>
+
+    <!-- Undo Button -->
+    <button class="undo-btn" onclick="undoAction()">↶</button>
+
+    <!-- Main Content Container -->
+    <div class="design-container">
+      <!-- Menu Section (Left) -->
+      <div class="design-menu-container">
+        <div class="menu-options">
+          <div class="menu-option" onclick="toggleMenu('shape')">
+            <span>Nail Shape</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div id="shape" class="menu-content active shape-options">
+            <button onclick="changeShape('coffin')">Coffin</button>
+            <button onclick="changeShape('oval')">Oval</button>
+            <button onclick="changeShape('shortround')">Short Round</button>
+            <button onclick="changeShape('square')">Square</button>
+            <button onclick="changeShape('stiletto')">Stiletto</button>
+          </div>
+
+          <div class="menu-option" onclick="toggleMenu('color')">
+            <span>Color Selection</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div id="color" class="menu-content">
+            <div id="selected-info">No nail selected</div>
+            <div class="color-options">
+              <button
+                class="color-btn"
+                style="background-color: #ff69b4"
+                onclick="applyColor(event, '#FF69B4')"
+              ></button>
+              <button
+                class="color-btn"
+                style="background-color: #ffd700"
+                onclick="applyColor(event, '#FFD700')"
+              ></button>
+              <button
+                class="color-btn"
+                style="background-color: #90ee90"
+                onclick="applyColor(event, '#90EE90')"
+              ></button>
+              <button
+                class="color-btn"
+                style="background-color: #87ceeb"
+                onclick="applyColor(event, '#87CEEB')"
+              ></button>
+              <button
+                class="color-btn"
+                style="background-color: #d8bfd8"
+                onclick="applyColor(event, '#D8BFD8')"
+              ></button>
+              <button
+                class="color-btn"
+                style="background-color: #ffb6c1"
+                onclick="applyColor(event, '#FFB6C1')"
+              ></button>
+              <button
+                class="color-btn"
+                style="background-color: #d2691e"
+                onclick="applyColor(event, '#D2691E')"
+              ></button>
+              <label class="custom-color-btn"
+                >🎨<input type="color" onchange="applyColor(event, this.value)"
+              /></label>
+            </div>
+          </div>
+
+          <div class="menu-option" onclick="toggleMenu('patterns')">
+            <span>Patterns</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div id="patterns" class="menu-content">
+            <p>[Patterns Placeholder]</p>
+          </div>
+
+          <div class="menu-option" onclick="toggleMenu('decor')">
+            <span>Decoration & Accessories</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div id="decor" class="menu-content">
+            <p>[Decoration Placeholder]</p>
+          </div>
+
+          <div class="menu-option" onclick="toggleMenu('topcoat')">
+            <span>Top Coat</span>
+            <span class="toggle-icon">▼</span>
+          </div>
+          <div id="topcoat" class="menu-content shape-options">
+            <button onclick="applyTopCoat('glossy')">Glossy</button>
+            <button onclick="applyTopCoat('matte')">Matte</button>
+            <button onclick="removeAllTopCoat()">Remove All</button>
+          </div>
+        </div>
       </div>
 
-      <h2>Design Your Own Nails</h2>
-
-      <!-- Undo Button -->
-      <button class="undo-btn" onclick="undoAction()">↶</button>
-    
-      <!-- Hands Preview -->
+      <!-- Hands Preview (Right) -->
       <div class="hand-container">
         <div id="left-hand"></div>
         <div id="right-hand"></div>
       </div>
-    
-      <!-- Menu Tabs -->
-      <div class="menu-tabs">
-        <button onclick="switchTab('shape')" class="active">Nail Shape</button>
-        <button onclick="switchTab('color')">Color Selection</button>
-        <button onclick="switchTab('patterns')">Patterns</button>
-        <button onclick="switchTab('decor')">Decoration</button>
-        <button onclick="switchTab('topcoat')">Top Coat</button>
-      </div>
-    
-      <!-- Menu Contents -->
-      <div id="shape" class="menu-content active shape-options">
-        <button onclick="changeShape('coffin')">Coffin</button>
-        <button onclick="changeShape('oval')">Oval</button>
-        <button onclick="changeShape('shortround')">Short Round</button>
-        <button onclick="changeShape('square')">Square</button>
-        <button onclick="changeShape('stiletto')">Stiletto</button>
-      </div>
-    
-      <div id="color" class="menu-content">
-        <div id="selected-info">No nail selected</div>
-        <div class="color-options">
-          <button class="color-btn" style="background-color:#FF69B4" onclick="applyColor(event, '#FF69B4')"></button>
-          <button class="color-btn" style="background-color:#FFD700" onclick="applyColor(event, '#FFD700')"></button>
-          <button class="color-btn" style="background-color:#90EE90" onclick="applyColor(event, '#90EE90')"></button>
-          <button class="color-btn" style="background-color:#87CEEB" onclick="applyColor(event, '#87CEEB')"></button>
-          <button class="color-btn" style="background-color:#D8BFD8" onclick="applyColor(event, '#D8BFD8')"></button>
-          <button class="color-btn" style="background-color:#FFB6C1" onclick="applyColor(event, '#FFB6C1')"></button>
-          <button class="color-btn" style="background-color:#D2691E" onclick="applyColor(event, '#D2691E')"></button>
-          <label class="custom-color-btn">🎨<input type="color" onchange="applyColor(event, this.value)" /></label>
-        </div>
-      </div>
-    
-      <div id="patterns" class="menu-content">
-        <p>[Patterns Placeholder]</p>
-      </div>
-    
-      <div id="decor" class="menu-content">
-        <p>[Decoration Placeholder]</p>
-      </div>
-    
-      <div id="topcoat" class="menu-content shape-options">
-        <button onclick="applyTopCoat('glossy')">Glossy</button>
-        <button onclick="applyTopCoat('matte')">Matte</button>
-        <button onclick="removeAllTopCoat()">Remove All</button>
-      </div>
-    
-      <!-- Footer Buttons -->
-      <div class="footer-buttons">
-        <button onclick="resetAll()">Reset</button>
-        <button disabled>Save</button>
-        <button disabled>Download</button>
-      </div>
+    </div>
+
+    <!-- Footer Buttons -->
+    <div class="footer-buttons">
+      <button onclick="resetAll()">Reset</button>
+      <button disabled>Save</button>
+      <button disabled>Download</button>
+    </div>
   </body>
+</html>
+message.txt

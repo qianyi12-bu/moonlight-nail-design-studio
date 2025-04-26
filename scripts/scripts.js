@@ -1,11 +1,38 @@
 let selectedNail = null;
 let undoStack = [];
+let activeMenu = "shape";
+
+function toggleMenu(tabId) {
+  // Check if this menu is already active
+  const isActive = document.getElementById(tabId).classList.contains("active");
+
+  if (isActive) {
+    // If it's already active, just close it
+    document.getElementById(tabId).classList.remove("active");
+    document
+      .querySelector(`.menu-option[onclick*="${tabId}"]`)
+      .classList.remove("active");
+  } else {
+    // If a different menu is being opened, close the current one
+    if (activeMenu && activeMenu !== tabId) {
+      document.getElementById(activeMenu).classList.remove("active");
+      document
+        .querySelector(`.menu-option[onclick*="${activeMenu}"]`)
+        .classList.remove("active");
+    }
+
+    // Open the clicked menu
+    document.getElementById(tabId).classList.add("active");
+    document
+      .querySelector(`.menu-option[onclick*="${tabId}"]`)
+      .classList.add("active");
+    activeMenu = tabId;
+  }
+}
+
 
 function switchTab(tabId) {
-  document.querySelectorAll('.menu-content').forEach(el => el.classList.remove('active'));
-  document.getElementById(tabId).classList.add('active');
-  document.querySelectorAll('.menu-tabs button').forEach(btn => btn.classList.remove('active'));
-  event.target.classList.add('active');
+  toggleMenu(tabId);
 }
 
 function applyColor(event, color) {
@@ -16,9 +43,11 @@ function applyColor(event, color) {
     removeTopCoat(selectedNail);
   }
 
-  document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('selected'));
-  if (event.currentTarget.classList.contains('color-btn')) {
-    event.currentTarget.classList.add('selected');
+  document
+    .querySelectorAll(".color-btn")
+    .forEach((btn) => btn.classList.remove("selected"));
+  if (event.currentTarget.classList.contains("color-btn")) {
+    event.currentTarget.classList.add("selected");
   }
 }
 
@@ -28,59 +57,62 @@ function applyTopCoat(type) {
   const svg = nails[0].ownerSVGElement;
   ensureGlossyGradient(svg);
 
-  nails.forEach(nail => {
+  nails.forEach((nail) => {
     pushUndo(nail);
     removeTopCoat(nail);
 
     const overlay = nail.cloneNode();
-    overlay.removeAttribute('class');
-    overlay.setAttribute('pointer-events', 'none');
+    overlay.removeAttribute("class");
+    overlay.setAttribute("pointer-events", "none");
 
-    if (type === 'glossy') {
-      overlay.setAttribute('fill', 'url(#glossyGradient)');
-      overlay.setAttribute('opacity', '0.6');
-    } else if (type === 'matte') {
-      overlay.setAttribute('fill', '#ffffff');
-      overlay.setAttribute('opacity', '0.3');
-      overlay.style.filter = 'blur(0.4px)';
+    if (type === "glossy") {
+      overlay.setAttribute("fill", "url(#glossyGradient)");
+      overlay.setAttribute("opacity", "0.6");
+    } else if (type === "matte") {
+      overlay.setAttribute("fill", "#ffffff");
+      overlay.setAttribute("opacity", "0.3");
+      overlay.style.filter = "blur(0.4px)";
     }
 
-    overlay.classList.add('topcoat-layer');
+    overlay.classList.add("topcoat-layer");
     nail.parentNode.appendChild(overlay);
   });
 }
 
 function removeAllTopCoat() {
   const nails = document.querySelectorAll(".nail-fill");
-  nails.forEach(nail => removeTopCoat(nail));
+  nails.forEach((nail) => removeTopCoat(nail));
 }
 
 function removeTopCoat(nail) {
   const svg = nail.ownerSVGElement;
-  const allLayers = svg.querySelectorAll('.topcoat-layer');
-  allLayers.forEach(layer => layer.remove());
+  const allLayers = svg.querySelectorAll(".topcoat-layer");
+  allLayers.forEach((layer) => layer.remove());
 }
 
 function ensureGlossyGradient(svg) {
-  if (svg.querySelector('#glossyGradient')) return;
+  if (svg.querySelector("#glossyGradient")) return;
 
-  const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
-  const grad = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
-  grad.setAttribute('id', 'glossyGradient');
-  grad.setAttribute('x1', '0%');
-  grad.setAttribute('y1', '0%');
-  grad.setAttribute('x2', '0%');
-  grad.setAttribute('y2', '100%');
+  const defs = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+  const grad = document.createElementNS(
+    "http://www.w3.org/2000/svg",
+    "linearGradient"
+  );
+  grad.setAttribute("id", "glossyGradient");
+  grad.setAttribute("x1", "0%");
+  grad.setAttribute("y1", "0%");
+  grad.setAttribute("x2", "0%");
+  grad.setAttribute("y2", "100%");
 
-  const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-  stop1.setAttribute('offset', '0%');
-  stop1.setAttribute('stop-color', 'white');
-  stop1.setAttribute('stop-opacity', '0.6');
+  const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+  stop1.setAttribute("offset", "0%");
+  stop1.setAttribute("stop-color", "white");
+  stop1.setAttribute("stop-opacity", "0.6");
 
-  const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
-  stop2.setAttribute('offset', '100%');
-  stop2.setAttribute('stop-color', 'white');
-  stop2.setAttribute('stop-opacity', '0');
+  const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+  stop2.setAttribute("offset", "100%");
+  stop2.setAttribute("stop-color", "white");
+  stop2.setAttribute("stop-opacity", "0");
 
   grad.appendChild(stop1);
   grad.appendChild(stop2);
@@ -89,6 +121,7 @@ function ensureGlossyGradient(svg) {
 }
 
 function changeShape(shapeName) {
+  console.log(shapeName);
   loadHand("left-hand", `./images/${shapeName}shape_left.svg`);
   loadHand("right-hand", `./images/${shapeName}shape_right.svg`);
 }
@@ -105,20 +138,22 @@ async function loadHand(containerId, svgPath) {
   container.appendChild(svgEl);
 
   const nails = container.querySelectorAll(".nail-fill");
-  nails.forEach(nail => {
+  nails.forEach((nail) => {
     if (!nail.getAttribute("fill")) {
       nail.setAttribute("fill", "#fff5ee");
     }
     nail.addEventListener("click", () => {
       selectedNail = nail;
-      document.getElementById("selected-info").innerHTML = `❤️ Selected: <strong>${nail.id || '(no id)'}</strong>`;
+      document.getElementById(
+        "selected-info"
+      ).innerHTML = `❤️ Selected: <strong>${nail.id || "(no id)"}</strong>`;
     });
   });
 }
 
 function resetAll() {
   const nails = document.querySelectorAll(".nail-fill");
-  nails.forEach(nail => {
+  nails.forEach((nail) => {
     nail.setAttribute("fill", "#fff5ee");
     removeTopCoat(nail);
   });
@@ -129,7 +164,7 @@ function pushUndo(nail) {
   const current = {
     element: nail,
     color: nail.getAttribute("fill"),
-    hadTopCoat: nail.ownerSVGElement.querySelector(".topcoat-layer") !== null
+    hadTopCoat: nail.ownerSVGElement.querySelector(".topcoat-layer") !== null,
   };
   undoStack.push(current);
 }
@@ -140,7 +175,7 @@ function undoAction() {
 
   last.element.setAttribute("fill", last.color);
   if (last.hadTopCoat) {
-    applyTopCoat('glossy');
+    applyTopCoat("glossy");
   } else {
     removeTopCoat(last.element);
   }
@@ -148,4 +183,9 @@ function undoAction() {
 
 window.onload = () => {
   changeShape("coffin");
+  // Set the first tab as active by default
+  document.querySelector(".menu-option").classList.add("active");
+  document.getElementById("shape").classList.add("active");
+  activeMenu = "shape";
 };
+message.txt
