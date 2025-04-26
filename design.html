@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- PUT A TITLE IN HERE -->
+    <title>Moonlight Nails Design Studio</title>
+    <!-- PUT A DESCRIPTION IN HERE -->
+    <meta name="description" content="Create Your Own Nails" />
+    <!-- LINK TO NORMALIZE (FOR CONSISTENCY) -->
+    <link rel="stylesheet" href="styles.normalize.css" />
+    <!-- LINK TO ANY FRAMEWORK STYLES HERE-->
+    <!-- LINK TO YOUR STYLES -->
+    <link rel="stylesheet" href="styles/styles.css" />
+    <!-- LINK TO EXTERNAL JS LIBRARIES HERE -->
+    <!-- LINK TO YOUR JS HERE. NOTE THE DEFER ATTRIBUTE. -->
+    <script src="scripts/scripts.js" defer></script>
+  </head>
+  <body class="design-page">
+    <div class="header-wrapper">
+      <h1>Moonlight Nails Design Studio</h1>
+      <nav>
+          <a href="home.html">HOME</a>
+          <a href="design.html">DESIGN</a>
+          <a href="about.html">ABOUT</a>
+      </nav>
+      </div>
+
+      <h2>Design Your Own Nails</h2>
+
+      <!-- Undo Button -->
+      <button class="undo-btn" onclick="undoAction()">↶</button>
+    
+      <!-- Hands Preview -->
+      <div class="hand-container">
+        <div id="left-hand"></div>
+        <div id="right-hand"></div>
+      </div>
+    
+      <!-- Menu Tabs -->
+      <div class="menu-tabs">
+        <button onclick="switchTab('shape')" class="active">Nail Shape</button>
+        <button onclick="switchTab('color')">Color Selection</button>
+        <button onclick="switchTab('patterns')">Patterns</button>
+        <button onclick="switchTab('decor')">Decoration</button>
+        <button onclick="switchTab('topcoat')">Top Coat</button>
+      </div>
+    
+      <!-- Menu Contents -->
+      <div id="shape" class="menu-content active shape-options">
+        <button onclick="changeShape('coffin')">Coffin</button>
+        <button onclick="changeShape('oval')">Oval</button>
+        <button onclick="changeShape('shortround')">Short Round</button>
+        <button onclick="changeShape('square')">Square</button>
+        <button onclick="changeShape('stiletto')">Stiletto</button>
+      </div>
+    
+      <div id="color" class="menu-content">
+        <div id="selected-info">No nail selected</div>
+        <div class="color-options">
+          <button class="color-btn" style="background-color:#FF69B4" onclick="applyColor(event, '#FF69B4')"></button>
+          <button class="color-btn" style="background-color:#FFD700" onclick="applyColor(event, '#FFD700')"></button>
+          <button class="color-btn" style="background-color:#90EE90" onclick="applyColor(event, '#90EE90')"></button>
+          <button class="color-btn" style="background-color:#87CEEB" onclick="applyColor(event, '#87CEEB')"></button>
+          <button class="color-btn" style="background-color:#D8BFD8" onclick="applyColor(event, '#D8BFD8')"></button>
+          <button class="color-btn" style="background-color:#FFB6C1" onclick="applyColor(event, '#FFB6C1')"></button>
+          <button class="color-btn" style="background-color:#D2691E" onclick="applyColor(event, '#D2691E')"></button>
+          <label class="custom-color-btn">🎨<input type="color" onchange="applyColor(event, this.value)" /></label>
+        </div>
+      </div>
+    
+      <div id="patterns" class="menu-content">
+        <p>[Patterns Placeholder]</p>
+      </div>
+    
+      <div id="decor" class="menu-content">
+        <p>[Decoration Placeholder]</p>
+      </div>
+    
+      <div id="topcoat" class="menu-content shape-options">
+        <button onclick="applyTopCoat('glossy')">Glossy</button>
+        <button onclick="applyTopCoat('matte')">Matte</button>
+        <button onclick="removeAllTopCoat()">Remove All</button>
+      </div>
+    
+      <!-- Footer Buttons -->
+      <div class="footer-buttons">
+        <button onclick="resetAll()">Reset</button>
+        <button disabled>Save</button>
+        <button disabled>Download</button>
+      </div>
+  </body>
