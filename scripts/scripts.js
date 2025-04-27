@@ -2,6 +2,33 @@ let selectedNail = null;
 let undoStack = [];
 let activeMenu = "shape";
 
+function toggleNav() {
+  var nav = document.querySelector('nav');
+  if (nav.style.display === 'flex') {
+    nav.style.display = 'none';
+  } else {
+    nav.style.display = 'flex';
+  }
+}
+
+function checkHeader() {
+  var h1 = document.querySelector('h1');
+  var nav = document.querySelector('nav');
+  var toggle = document.querySelector('.nav-toggle');
+
+  if (h1.offsetHeight > 70) {
+    toggle.style.display = 'block';
+    nav.style.display = 'none';
+  } else {
+    toggle.style.display = 'none';
+    nav.style.display = 'flex';
+  }
+}
+
+window.addEventListener('load', checkHeader);
+
+window.addEventListener('resize', checkHeader);
+
 function toggleMenu(tabId) {
   // Check if this menu is already active
   const isActive = document.getElementById(tabId).classList.contains("active");
@@ -29,7 +56,6 @@ function toggleMenu(tabId) {
     activeMenu = tabId;
   }
 }
-
 
 function switchTab(tabId) {
   toggleMenu(tabId);

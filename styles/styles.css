@@ -50,7 +50,9 @@ h1 {
 
 /* nav */
 nav {
-  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 30px;
 }
 nav a {
   color: #f8eaff;
@@ -70,6 +72,20 @@ nav a:hover {
   color: #ffc1e3;
   text-shadow: 0 0 5px rgba(255, 192, 203, 0.5);
   transform: scale(1.05);
+}
+
+.nav-toggle {
+  display: none;
+  cursor: pointer;
+  position: absolute;
+  top: 4.2rem;
+  right: 2rem;
+  z-index: 1000;
+}
+
+.nav-toggle img {
+  width: 32px;
+  height: 32px;
 }
 
 /* general body */
@@ -198,14 +214,17 @@ button:hover a::after {
 .design-page .design-container {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;
   gap: 2rem;
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
+  align-items: stretch;
 }
 
 .design-menu-container {
-  flex: 1;
+  flex: 0 0 280px;
+  min-width: 220px;
   display: flex;
   flex-direction: column;
   background-color: rgba(255, 255, 255, 0.05);
@@ -300,7 +319,8 @@ button:hover a::after {
 
 /* Right Hand Container */
 .hand-container {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 300px;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -311,6 +331,7 @@ button:hover a::after {
   justify-content: space-between;
   align-items: center;
   height: 100%;
+  min-height: 100%;
 }
 
 #left-hand,
@@ -466,20 +487,43 @@ button:hover a::after {
 /* Responsive adjustments */
 @media (max-width: 992px) {
   .design-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+  }
+
+  nav {
+    display: none;
     flex-direction: column;
+    position: absolute;
+    top: 6.2rem;
+    right: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+  }
+
+  nav a {
+    flex: none;
+    text-align: center;
+    margin: 8px 0;
+    color: #fff0f8;
+    font-size: 20px;
   }
 
   .design-menu-container {
-    flex: 1 1 auto;
-    max-width: 100%;
-    padding: 1rem;
-    margin-bottom: 2rem;
+    flex: 0 0 300px;
+    max-width: 300px;
+    min-width: 250px
   }
 
   .menu-options {
-    flex-direction: row;
-    overflow-x: auto;
-    padding-bottom: 1rem;
+    flex-direction: column;
+    overflow-x: visible;
+    padding-bottom: 0;
   }
 
   .menu-option {
@@ -487,7 +531,9 @@ button:hover a::after {
   }
 
   .hand-container {
-    padding: 1rem;
+    flex: 1;
+    min-width: 300px;
+
   }
 
   #left-hand,
@@ -501,12 +547,75 @@ button:hover a::after {
     font-size: 2rem;
   }
 
-  .hand-container {
-    padding: 1rem;
+
+  nav {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 8rem;
+    right: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
+    border-radius: 8px;
+    padding: 10px 20px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 999;
+  }
+
+
+  nav a {
+    flex: none;
+    text-align: center;
+    margin: 8px 0;
+    color: #fff0f8;
+    font-size: 20px;
+  }
+
+  .nav-toggle {
+    display: block;
+    position: absolute;
+    top: 7rem;
+    right: 1.5rem;
+    z-index: 1000;
+  }
+
+  .design-container {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .design-menu-container {
+    flex: 0 0 250px;
+    max-width: 250px;
+    min-width: 220px;
+  }
+
+  .menu-options {
+    flex-direction: column;
+    overflow-x: visible;
+    padding-bottom: 0;
   }
 
   #left-hand,
   #right-hand {
     min-height: 150px;
   }
+
+
+.hand-container {
+  flex: 1;
+  min-width: 250px;
+}
+}
+
+nav#nav-menu {
+  display: flex;
+  justify-content: center;
+  gap: 30px;
+}
+
+nav#nav-menu a {
+  color: #fff0f8;
+  font-size: 20px;
+  text-align: center;
 }
