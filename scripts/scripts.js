@@ -3,6 +3,9 @@ let undoStack = [];
 let activeMenu = "shape";
 let decorationCounter = 0; // Unique ID for each decoration
 let draggedDecoration = null; // For moving decorations
+let savedPreviewURL = null; // store preview URL
+let selectedPattern = null; // currently selected pattern
+let selectedDecoration = null; // your original decoration
 
 // Toggle mobile navigation menu
 function toggleNav() {
@@ -167,7 +170,7 @@ function enableDropOnNails() {
     }
     nail.addEventListener("click", () => {
       selectedNail = nail;
-      document.getElementById("selected-info").innerHTML = `❤️ Selected: <strong>${nail.id || "(no id)"}</strong>`;
+      document.getElementById("selected-info-panel").innerHTML = `❤️ Selected: <strong>${nail.id || "(no id)"}</strong>`;
     });
     nail.addEventListener("dragover", (e) => {
       e.preventDefault();
@@ -296,3 +299,166 @@ function createUploadedDecoration(base64Image) {
   button.appendChild(img);
   decorMenu.appendChild(button);
 }
+
+// Preview function: create a vertically stacked preview of nails including decorations
+function previewDesign() {
+  const left = document.getElementById('left-hand').querySelector('svg');
+  const right = document.getElementById('right-hand').querySelector('svg');
+  if (!left || !right) return;
+
+  const wrapper = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  wrapper.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  wrapper.setAttribute('width', '400');
+  wrapper.setAttribute('height', '600'); // Smaller height, reduced spacing
+
+  // Clone and adjust left hand
+  const leftClone = left.cloneNode(true);
+  const leftGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  leftGroup.appendChild(leftClone);
+  leftGroup.setAttribute('transform', 'translate(50, 30) scale(0.8)'); // tighten spacing
+
+  // Clone and adjust right hand
+  const rightClone = right.cloneNode(true);
+  const rightGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+  rightGroup.appendChild(rightClone);
+  rightGroup.setAttribute('transform', 'translate(50, 300) scale(0.8)');
+
+  wrapper.appendChild(leftGroup);
+  wrapper.appendChild(rightGroup);
+
+  // Serialize to SVG string
+  const serializer = new XMLSerializer();
+  const svgString = serializer.serializeToString(wrapper);
+  const blob = new Blob([svgString], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  const img = new Image();
+  img.onload = function () {
+    const canvas = document.createElement('canvas');
+    canvas.width = 400;
+    canvas.height = 600;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = "#a48cb1"; // your background color
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, 0, 0);
+
+    canvas.toBlob(function (blob) {
+      if (savedPreviewURL) {
+        URL.revokeObjectURL(savedPreviewURL);
+      }
+      savedPreviewURL = URL.createObjectURL(blob);
+
+      // Show preview
+      showPreviewImage(savedPreviewURL);
+    });
+
+    URL.revokeObjectURL(url);
+  };
+  img.src = url;
+}
+
+// Show preview image in page
+// Show preview image in page (with a close button)
+function showPreviewImage(imageUrl) {
+  let previewContainer = document.getElementById('preview-container');
+  if (!previewContainer) {
+    previewContainer = document.createElement('div');
+    previewContainer.id = 'preview-container';
+    previewContainer.style.textAlign = 'center';
+    previewContainer.style.marginTop = '2rem';
+    document.body.appendChild(previewContainer);
+  }
+  previewContainer.innerHTML = `
+    <div style="position: relative; display: inline-block;">
+      <img src="${imageUrl}" alt="Preview" style="max-width: 90%; border: 2px solid white; border-radius: 8px;"/>
+      <button onclick="closePreview()" style="
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: rgba(0,0,0,0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        font-size: 18px;
+        cursor: pointer;
+      ">×</button>
+    </div>
+    <br><br>
+    <button onclick="downloadPreview()">Download</button>
+  `;
+}
+
+// Close preview image
+function closePreview() {
+  const previewContainer = document.getElementById('preview-container');
+  if (previewContainer) {
+    previewContainer.remove();
+  }
+}
+
+
+// Download the previewed image
+function downloadPreview() {
+  if (!savedPreviewURL) {
+    alert("Please click Preview first!");
+    return;
+  }
+  const today = new Date();
+  const yyyy = today.getFullYear();
+  const mm = String(today.getMonth() + 1).padStart(2, '0');
+  const dd = String(today.getDate()).padStart(2, '0');
+  const filename = `my_nail_design_${yyyy}-${mm}-${dd}.png`;
+
+  const a = document.createElement('a');
+  a.href = savedPreviewURL;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+}
+
+// pattern
+function selectPattern(imagePath) {
+  selectedPattern = imagePath;
+}
+function applyPattern(nail, patternImagePath) {
+  const svg = nail.ownerSVGElement;
+  const bbox = nail.getBBox();
+
+  // Remove old pattern if exists
+  const oldPattern = svg.querySelector(`.pattern-${nail.id}`);
+  if (oldPattern) {
+    oldPattern.remove();
+  }
+
+  const img = document.createElementNS("http://www.w3.org/2000/svg", "image");
+  img.setAttributeNS(null, "href", patternImagePath);
+  img.setAttribute("width", bbox.width);
+  img.setAttribute("height", bbox.height);
+  img.setAttribute("x", bbox.x);
+  img.setAttribute("y", bbox.y);
+  img.setAttribute("opacity", "0.5");
+  img.classList.add(`pattern-${nail.id}`);
+
+  svg.appendChild(img);
+}
+
+
+nail.addEventListener("click", () => {
+  selectedNail = nail;
+  document.getElementById("selected-info").innerHTML = `❤️ Selected: <strong>${nail.id || "(no id)"}</strong>`;
+
+  // If pattern is selected, apply it
+  if (selectedPattern) {
+    applyPattern(nail, selectedPattern);
+    selectedPattern = null;
+  }
+
+  // If decoration is selected 
+  if (selectedDecoration) {
+    applyDecoration(nail, selectedDecoration);
+    selectedDecoration = null;
+  }
+});
