@@ -59,7 +59,6 @@ function applyTopCoat(type) {
   if (!nails.length) return;
   const svg = nails[0].ownerSVGElement;
   ensureGlossyGradient(svg);
-
   nails.forEach((nail) => {
     removeTopCoat(nail);
     const overlay = nail.cloneNode();
@@ -118,7 +117,7 @@ async function loadHand(containerId, svgPath) {
 function insertAboveNail(nail, element) {
   const parent = nail.parentNode;
   let ref = nail.nextSibling;
-  while (ref && ref.classList && (ref.classList.contains("topcoat-layer") || ref.classList.value.includes("pattern-"))) {
+  while (ref && ref.classList && ref.classList.contains("topcoat-layer")) {
     ref = ref.nextSibling;
   }
   parent.insertBefore(element, ref);
@@ -213,15 +212,6 @@ function undoAction() {
   const last = undoStack.pop();
   if (!last) return;
   redoStack.push(last);
-  if (last.type === "color") {
-    last.nail.setAttribute("fill", last.oldColor);
-  } else if (last.type === "pattern") {
-    const svg = last.nail.ownerSVGElement;
-    svg.querySelectorAll(`.pattern-${last.nail.id}`).forEach((el) => el.remove());
-    svg.querySelector(`#clip-${last.nail.id}`)?.remove();
-  } else if (last.type === "decoration") {
-    last.element.remove();
-  }
 }
 function redoAction() {
   const next = redoStack.pop();
@@ -244,46 +234,3 @@ window.onload = () => {
   document.querySelector(".menu-option").classList.add("active");
   document.getElementById("shape").classList.add("active");
 };
-
-// upload png file
-function handleUserUpload(event) {
-  const fileInput = event.target;
-  const file = fileInput.files[0];
-  if (!file) return;
-
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    if (selectedNail) {
-      const svg = selectedNail.ownerSVGElement;
-      const bbox = selectedNail.getBBox();
-
-      const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
-      group.classList.add("decoration-layer");
-
-      const img = document.createElementNS("http://www.w3.org/2000/svg", "image");
-      img.setAttributeNS("http://www.w3.org/1999/xlink", "href", e.target.result);
-      img.setAttribute("width", bbox.width * 0.5);
-      img.setAttribute("height", bbox.height * 0.5);
-      img.setAttribute("x", bbox.x + bbox.width * 0.25);
-      img.setAttribute("y", bbox.y + bbox.height * 0.25);
-      img.setAttribute("pointer-events", "visiblePainted");
-
-      group.appendChild(img);
-      insertAboveNail(selectedNail, group);
-
-      pushUndo({ type: "decoration", element: group });
-
-      group.addEventListener("mousedown", (e) => {
-        draggedDecoration = { target: group, startX: e.clientX, startY: e.clientY, origTransform: group.getAttribute("transform") || "" };
-        e.preventDefault();
-      });
-    } else {
-      alert("Please select a nail first!");
-    }
-
-    fileInput.value = "";
-  };
-  reader.readAsDataURL(file);
-}
-
-
