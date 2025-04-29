@@ -10,25 +10,26 @@ let selectedPattern = null;
 let selectedDecoration = null;
 let currentShape = "coffin";
 
-function toggleNav() {
-  const nav = document.querySelector("nav");
-  nav.style.display = nav.style.display === "flex" ? "none" : "flex";
-}
 
-function checkHeader() {
-  const h1 = document.querySelector("h1");
-  const nav = document.querySelector("nav");
-  const toggle = document.querySelector(".nav-toggle");
-  if (h1.offsetHeight > 70) {
-    toggle.style.display = "block";
-    nav.style.display = "none";
-  } else {
-    toggle.style.display = "none";
-    nav.style.display = "flex";
-  }
-}
-window.addEventListener("load", checkHeader);
-window.addEventListener("resize", checkHeader);
+// function toggleNav() {
+//   const nav = document.querySelector("nav");
+//   nav.style.display = nav.style.display === "flex" ? "none" : "flex";
+// }
+//
+// function checkHeader() {
+//   const h1 = document.querySelector("h1");
+//   const nav = document.querySelector("nav");
+//   const toggle = document.querySelector(".nav-toggle");
+//   if (h1.offsetHeight > 70) {
+//     toggle.style.display = "block";
+//     nav.style.display = "none";
+//   } else {
+//     toggle.style.display = "none";
+//     nav.style.display = "flex";
+//   }
+// }
+// window.addEventListener("load", checkHeader);
+// window.addEventListener("resize", checkHeader);
 
 function toggleMenu(tabId) {
   const isActive = document.getElementById(tabId).classList.contains("active");
@@ -171,19 +172,20 @@ function enableDropOnNails() {
 function applyDecoration(nail, imagePath) {
   const svg = nail.ownerSVGElement;
   const bbox = nail.getBBox();
-  
+
 
   const group = document.createElementNS("http://www.w3.org/2000/svg", "g");
   group.classList.add("decoration-layer");
 
 
   const img = document.createElementNS("http://www.w3.org/2000/svg", "image");
-  img.setAttributeNS("http://www.w3.org/1999/xlink", "href", imagePath);
+  // 拼接正确图片路径
+  img.setAttributeNS("http://www.w3.org/1999/xlink", "href", '/images/'+imagePath);
   img.setAttribute("width", bbox.width * 0.5);
   img.setAttribute("height", bbox.height * 0.5);
   img.setAttribute("x", bbox.x + bbox.width * 0.25);
   img.setAttribute("y", bbox.y + bbox.height * 0.25);
-  img.setAttribute("pointer-events", "visiblePainted"); 
+  img.setAttribute("pointer-events", "visiblePainted");
 
   group.appendChild(img);
   insertAboveNail(nail, group);
@@ -233,3 +235,4 @@ window.onload = () => {
   document.querySelector(".menu-option").classList.add("active");
   document.getElementById("shape").classList.add("active");
 };
+
