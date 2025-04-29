@@ -286,5 +286,4 @@ function handleUserUpload(event) {
   reader.readAsDataURL(file);
 }
 
-//
 
