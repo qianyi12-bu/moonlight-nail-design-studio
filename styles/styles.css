@@ -49,9 +49,9 @@ h1 {
   0 0 30px #b198ea,
   0 0 50px #b198ea,
   0 0 70px #87ceeb;
-  margin-bottom: 16px;
+  margin-top: 40px;
+  margin-bottom: 40px;
   text-shadow: 2px 2px 6px rgba(0, 0, 0, 0.3);
-  margin-top: 0;
   word-spacing: 12px;
   animation: neon-glow 2.5s ease-in-out forwards;
   opacity: 0;
@@ -310,6 +310,12 @@ button:hover a::after {
   transition: all 0.3s ease;
   display: block;
   width: 100%;
+}
+.menu-content button {
+  font-family: "Fuzzy Bubbles", sans-serif;
+  font-size: 1rem;
+  color: #fff0f8;
+  font-weight: 700;
 }
 
 .design-option-btn:hover {
@@ -657,8 +663,15 @@ button:hover a::after {
   }
 
   .design-container {
-    flex-direction: row;
-    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: stretch;
+    padding: 1rem;
+  }
+
+  .design-menu-container,
+  .hand-container {
+    width: 100%;
+    padding: 1rem;
   }
 
   .design-menu-container {
@@ -683,7 +696,7 @@ button:hover a::after {
   flex: 1;
   min-width: 250px;
 }
-}
+
 
 nav#nav-menu {
   display: flex;
@@ -695,4 +708,18 @@ nav#nav-menu a {
   color: #fff0f8;
   font-size: 20px;
   text-align: center;
+}
+.hand-controls {
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.control-btn,
+.design-option-btn,
+.button-flat {
+  width: 100%;
+  font-size: 1rem;
+  padding: 0.75rem 1rem;
+}
 }

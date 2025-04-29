@@ -102,13 +102,13 @@
           </div>
           <div id="patterns" class="menu-content">
             <button onclick="selectPattern('images/pattern1.png')">
-              <img src="images/pattern 1.png" alt="Pattern 1" style="width: 50px; height: 50px;">
+              <img src="images/pattern1.png" alt="Pattern 1" style="width: 50px; height: 50px;">
             </button>
             <button onclick="selectPattern('images/pattern2.png')">
-              <img src="images/pattern 2.png" alt="Pattern 2" style="width: 50px; height: 50px;">
+              <img src="images/pattern2.png" alt="Pattern 2" style="width: 50px; height: 50px;">
             </button>
             <button onclick="selectPattern('images/pattern3.png')">
-              <img src="images/pattern 3.png" alt="Pattern 3" style="width: 50px; height: 50px;">
+              <img src="images/pattern3.png" alt="Pattern 3" style="width: 50px; height: 50px;">
             </button>
           </div>
 
@@ -117,14 +117,14 @@
             <span class="toggle-icon">▼</span>
           </div>
           <div id="decor" class="menu-content">
-            <button onclick="selectDecoration('13.png')">
+            <button class="design-option-btn" onclick="selectDecoration('13.png')">
               <img src="images/13.png" 
               alt="Decoration" 
               draggable="true" 
               ondragstart="startDrag(event, 'images/13.png')" 
               style="width: 50px; height: 50px;">
             </button>
-            <button>
+            <button class="design-option-btn">
               <label style="cursor:pointer;">
                 Upload
                 <input type="file" accept="image/png" onchange="handleFileUpload(event)" style="display:none;">
@@ -136,9 +136,9 @@
             <span class="toggle-icon">▼</span>
           </div>
           <div id="topcoat" class="menu-content shape-options">
-            <button onclick="applyTopCoat('glossy')">Glossy</button>
-            <button onclick="applyTopCoat('matte')">Matte</button>
-            <button onclick="removeAllTopCoat()">Remove All</button>
+            <button class="design-option-btn" onclick="applyTopCoat('glossy')">Glossy</button>
+            <button class="design-option-btn" onclick="applyTopCoat('matte')">Matte</button>
+            <button class="design-option-btn" onclick="removeAllTopCoat()">Remove All</button>
           </div>
         </div>
       </div>
